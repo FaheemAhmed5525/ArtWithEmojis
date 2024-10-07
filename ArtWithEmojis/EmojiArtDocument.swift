@@ -11,7 +11,12 @@ import SwiftUI
 class EmojiArtDocument: ObservableObject {
     typealias Emoji = EmojiArt.Emoji
     
-    private var emojiArt = EmojiArt()
+    @Published private var emojiArt = EmojiArt()
+    
+    init() {
+        emojiArt.addEmoji("☀️", at: .init(x: 400, y: 520), size: 200)
+        emojiArt.addEmoji("🍀", at: .init(x: -300, y: -520), size: 230)
+    }
     
     var emojis: [Emoji] {
         emojiArt.emojis
