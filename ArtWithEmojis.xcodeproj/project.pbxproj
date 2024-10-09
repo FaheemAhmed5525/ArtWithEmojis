@@ -17,7 +17,9 @@
 		0D7EA73F2CB39FCF0091FE28 /* EmojiArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D7EA73E2CB39FCF0091FE28 /* EmojiArt.swift */; };
 		0D7EA7412CB3A18F0091FE28 /* EmojiArtDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D7EA7402CB3A18F0091FE28 /* EmojiArtDocument.swift */; };
 		0D7EA7432CB3A3B60091FE28 /* EmojiArtDocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D7EA7422CB3A3B60091FE28 /* EmojiArtDocumentView.swift */; };
+		0D9F0C152CB50A3A00BEB8F6 /* StrURLData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D9F0C142CB50A3900BEB8F6 /* StrURLData.swift */; };
 		0DBAEC112CB3A9AA00A732E5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBAEC102CB3A9AA00A732E5 /* Extensions.swift */; };
+		0DDEE49C2CB673590009B244 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DDEE49B2CB673590009B244 /* Palette.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,7 +53,10 @@
 		0D7EA73E2CB39FCF0091FE28 /* EmojiArt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiArt.swift; sourceTree = "<group>"; };
 		0D7EA7402CB3A18F0091FE28 /* EmojiArtDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiArtDocument.swift; sourceTree = "<group>"; };
 		0D7EA7422CB3A3B60091FE28 /* EmojiArtDocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiArtDocumentView.swift; sourceTree = "<group>"; };
+		0D9F0C142CB50A3900BEB8F6 /* StrURLData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrURLData.swift; sourceTree = "<group>"; };
 		0DBAEC102CB3A9AA00A732E5 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		0DDEE49B2CB673590009B244 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
+		0DE16FA32CB3F1220093A172 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +87,7 @@
 		0D7EA7082CB39E060091FE28 = {
 			isa = PBXGroup;
 			children = (
+				0DDEE49B2CB673590009B244 /* Palette.swift */,
 				0D7EA7132CB39E070091FE28 /* ArtWithEmojis */,
 				0D7EA7242CB39E0A0091FE28 /* ArtWithEmojisTests */,
 				0D7EA72E2CB39E0A0091FE28 /* ArtWithEmojisUITests */,
@@ -102,6 +108,7 @@
 		0D7EA7132CB39E070091FE28 /* ArtWithEmojis */ = {
 			isa = PBXGroup;
 			children = (
+				0DE16FA32CB3F1220093A172 /* Info.plist */,
 				0D7EA7142CB39E070091FE28 /* ArtWithEmojisApp.swift */,
 				0D7EA7162CB39E070091FE28 /* ContentView.swift */,
 				0D7EA7182CB39E0A0091FE28 /* Assets.xcassets */,
@@ -110,6 +117,7 @@
 				0D7EA7402CB3A18F0091FE28 /* EmojiArtDocument.swift */,
 				0D7EA7422CB3A3B60091FE28 /* EmojiArtDocumentView.swift */,
 				0DBAEC102CB3A9AA00A732E5 /* Extensions.swift */,
+				0D9F0C142CB50A3900BEB8F6 /* StrURLData.swift */,
 			);
 			path = ArtWithEmojis;
 			sourceTree = "<group>";
@@ -274,7 +282,9 @@
 				0D7EA73F2CB39FCF0091FE28 /* EmojiArt.swift in Sources */,
 				0D7EA7172CB39E070091FE28 /* ContentView.swift in Sources */,
 				0D7EA7152CB39E070091FE28 /* ArtWithEmojisApp.swift in Sources */,
+				0D9F0C152CB50A3A00BEB8F6 /* StrURLData.swift in Sources */,
 				0D7EA7412CB3A18F0091FE28 /* EmojiArtDocument.swift in Sources */,
+				0DDEE49C2CB673590009B244 /* Palette.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,6 +450,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ArtWithEmojis/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ArtWithEmojis/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -468,6 +479,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ArtWithEmojis/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ArtWithEmojis/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
