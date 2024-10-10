@@ -8,20 +8,30 @@
 import SwiftUI
 
 struct PaletteChooser: View {
-    @ObservedObject var store = PaletterStore(named: "Main")
+    @EnvironmentObject var store = PaletterStore
+    
+    @State private var shwoPaletteEditor = false
+    
     var body: some View {
         HStack {
             chooser
             view(for: store.palettes[store.cursorIndex])
+//                .popover(isPresented: $shwoPaletteEditor) {
+//                    PaletteEditor()
+//                }
         }
         .clipped()
+        .sheet(isPresented: $shwoPaletteEditor) {
+            PaletteEditor(palette: $store.palettes[store.cursorIndex])
+                .font(nil)
+        }
     }
     
     private var gotoMenu: some View {
         Menu {
             ForEach(store.palettes) { palette in
                 AnimatedActionButton(palette.name) {
-                    if let index = store.palettes.firstIndex(where: { $0.id == palettes.id }) {
+                    if let index = $store.palettes.firstIndex(where: { $0.id == palette.id }) {
                         store.cursorIndex = index
                     }
                 }
@@ -45,6 +55,9 @@ struct PaletteChooser: View {
             }
             AnimatedActionButton("Delete" ,systemImage: "minus.circle",  role: .destructive ) {
                 store.palettes.remove(at: store.cursorIndex)
+            }
+            AnimatedActionButton("Edit", systemImage: "pencil") {
+                shwoPaletteEditor = true
             }
         }
     }
