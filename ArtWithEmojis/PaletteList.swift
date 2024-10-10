@@ -16,14 +16,14 @@ struct EditablePaletteList: View {
     var body: some View {
         List {
             ForEach(store.palettes) { palette in
-                NavigationLink(value: palette) {
+                NavigationLink(value: palette.id) {
                     VStack(alignment: .leading) {
                         Text(palette.name)
                         Text(palette.emojis).lineLimit(1)
                     }
                 }
-                .navigationDestination(for: Palette.self) {palette in
-                    if let index = store.palettes.firstIndex(where: { $0.id == palette.id }) {
+                .navigationDestination(for: Palette.ID.self) {paletteId in
+                    if let index = store.palettes.firstIndex(where: { $0.id == paletteId }) {
                         PaletteEditor(palette: $store.palettes[index])
                     }
                 }
