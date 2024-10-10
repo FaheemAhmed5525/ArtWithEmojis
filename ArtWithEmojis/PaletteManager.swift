@@ -2,7 +2,7 @@
 //  PaletteManager.swift
 //  ArtWithEmojis
 //
-//  Created by Faheeam Ahmed on 10/10/2024.
+//  Created by Faheem Ahmed on 10/10/2024.
 //
 
 import SwiftUI

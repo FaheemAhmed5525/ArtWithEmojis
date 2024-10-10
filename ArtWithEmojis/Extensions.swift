@@ -2,7 +2,7 @@
 //  Extensions.swift
 //  ArtApp
 //
-//  Created by Faheeam Ahmed on 24/09/2024.
+//  Created by Faheem Ahmed on 24/09/2024.
 //
 
 import SwiftUI

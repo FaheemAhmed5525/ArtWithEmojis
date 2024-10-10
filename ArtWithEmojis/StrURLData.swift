@@ -2,7 +2,7 @@
 //  StrURLData.swift
 //  ArtWithEmojis
 //
-//  Created by Faheeam Ahmed on 08/10/2024.
+//  Created by Faheem Ahmed on 08/10/2024.
 //
 
 import CoreTransferable

@@ -2,7 +2,7 @@
 //  EmojiArtDocument.swift
 //  ArtWithEmojis
 //
-//  Created by Faheeam Ahmed on 07/10/2024.
+//  Created by Faheem Ahmed on 07/10/2024.
 //
 
 import SwiftUI
