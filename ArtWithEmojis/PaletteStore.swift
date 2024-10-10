@@ -1,5 +1,5 @@
 //
-//  PaletterStore.swift
+//  PaletteStore.swift
 //  ArtWithEmojis
 //
 //  Created by Faheeam Ahmed on 09/10/2024.
@@ -7,7 +7,10 @@
 
 import SwiftUI
 
-class PaletterStore: ObservableObject {
+class PaletteStore: ObservableObject, Identifiable, Equatable, Hashable {
+    
+  
+    
     let name: String
     
     private var userDefaultKey: String{ "PaletteStore:" + name}
@@ -75,6 +78,15 @@ class PaletterStore: ObservableObject {
                 palettes.remove(at: index)
             }
         }
+    }
+    
+    
+    static func == (lhs: PaletteStore, rhs: PaletteStore) -> Bool {
+        lhs.name == rhs.name
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
     }
 }
 

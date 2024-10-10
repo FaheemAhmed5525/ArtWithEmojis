@@ -123,5 +123,5 @@ struct EmojiArtDocumentView: View {
 
 #Preview {
     EmojiArtDocumentView(document: EmojiArtDocument())
-        .environmentObject(PaletterStore(named: "Preview"))
+        .environmentObject(PaletteStore(named: "Preview"))
 }

@@ -8,22 +8,28 @@
 import SwiftUI
 
 struct PaletteChooser: View {
-    @EnvironmentObject var store = PaletterStore
+    @EnvironmentObject var store: PaletteStore
     
-    @State private var shwoPaletteEditor = false
+    @State private var showPaletteEditor = false
+    @State private var showPaletteList = false
     
     var body: some View {
         HStack {
             chooser
             view(for: store.palettes[store.cursorIndex])
-//                .popover(isPresented: $shwoPaletteEditor) {
+//                .popover(isPresented: $showPaletteEditor) {
 //                    PaletteEditor()
 //                }
         }
         .clipped()
-        .sheet(isPresented: $shwoPaletteEditor) {
+        .sheet(isPresented: $showPaletteEditor) {
             PaletteEditor(palette: $store.palettes[store.cursorIndex])
                 .font(nil)
+        }
+        .sheet(isPresented: $showPaletteList) {
+            NavigationStack {EditablePaletteList(store: store)
+                    .font(nil)
+            }
         }
     }
     
@@ -50,14 +56,18 @@ struct PaletteChooser: View {
         }
         .contextMenu {
             gotoMenu
-            AnimatedActionButton("New", systemImage: "plus.circle") {
-                store.insert(name: "Math", emojis: "+-*/??")
+            AnimatedActionButton("New", systemImage: "plus") {
+                store.insert(name: "", emojis: "")
+                showPaletteEditor = true
             }
             AnimatedActionButton("Delete" ,systemImage: "minus.circle",  role: .destructive ) {
                 store.palettes.remove(at: store.cursorIndex)
             }
             AnimatedActionButton("Edit", systemImage: "pencil") {
-                shwoPaletteEditor = true
+                showPaletteEditor = true
+            }
+            AnimatedActionButton("List", systemImage: "list.bullet.rectangle.portrait") {
+                showPaletteEditor = true
             }
         }
     }
@@ -94,5 +104,5 @@ struct ScrollingEmojis: View {
 
 #Preview {
     PaletteChooser()
-        .environmentObject(PaletterStore(named: "Preview"))
+        .environmentObject(PaletteStore(named: "Preview"))
 }
