@@ -17,13 +17,29 @@ struct PaletteChooser: View {
         .clipped()
     }
     
-    var chooser: some View {
+    private var gotoMenu: some View {
+        Menu {
+            ForEach(store.palettes) { palette in
+                AnimatedActionButton(palette.name) {
+                    if let index = store.palettes.firstIndex(where: { $0.id == palettes.id }) {
+                        store.cursorIndex = index
+                    }
+                }
+            }
+        } label: {
+            Label("Go To", systemImage: "text.insert")
+        }
+    }
+    
+    
+    private var chooser: some View {
         AnimatedActionButton(systemImage: "paintpalette") {
             withAnimation {
                 store.cursorIndex += 1
             }
         }
         .contextMenu {
+            gotoMenu
             AnimatedActionButton("New", systemImage: "plus.circle") {
                 store.insert(name: "Math", emojis: "+-*/??")
             }

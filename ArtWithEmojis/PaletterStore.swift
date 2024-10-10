@@ -10,13 +10,14 @@ import SwiftUI
 class PaletterStore: ObservableObject {
     let name: String
     
+    private var userDefaultKey: String{ "PaletteStore:" + name}
     var palettes: [Palette] {
         get {
-            UserDefaults.standard.palettes(forKey: name)
+            UserDefaults.standard.palettes(forKey: userDefaultKey)
         }
         set {
             if !newValue.isEmpty {
-                UserDefaults.standard.set(newValue, forKey: name)
+                UserDefaults.standard.set(newValue, forKey: userDefaultKey)
                 objectWillChange.send()
             }
         }
