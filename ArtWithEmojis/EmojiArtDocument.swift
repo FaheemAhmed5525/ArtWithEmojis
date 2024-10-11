@@ -53,6 +53,17 @@ class EmojiArtDocument: ObservableObject {
         emojiArt.emojis
     }
     
+    var bbox: CGRect {
+        var bbox = CGRect.zero
+        for emoji in emojiArt.emojis {
+            bbox = bbox.union(emoji.bbox)
+        }
+        if let backgroundSize = background.uiImage?.size {
+            bbox = bbox.union(CGRect(center: .zero, size: backgroundSize))
+        }
+        return bbox
+    }
+    
 //    var background: URL? {
 //        emojiArt.background
 //    }
@@ -67,7 +78,7 @@ class EmojiArtDocument: ObservableObject {
         if let url = emojiArt.background {
             background = .fatching(url)
             do {
-                let image = try await fetchUIImage(from: url)
+                _ = try await fetchUIImage(from: url)
                 if url == emojiArt.background {
                     background = .found(try await fetchUIImage(from: url))
                 }
@@ -82,7 +93,7 @@ class EmojiArtDocument: ObservableObject {
 
     private func fetchUIImage(from url: URL) async throws -> UIImage {
         let (data, _) = try await URLSession.shared.data(from: url)
-        if let uiImage = UIImage(data: data) {
+        if UIImage(data: data) != nil {
             return UIImage(data: data)!
         } else {
             throw FetchError.badImageData
@@ -145,12 +156,16 @@ extension EmojiArt.Emoji {
     var font: Font {
         Font.system(size: CGFloat(size))
     }
+    var bbox: CGRect {
+        CGRect(
+            center: position.in(nil),
+            size: CGSize(width: CGFloat(size), height: CGFloat(size)))
+    }
 }
 
 extension EmojiArt.Emoji.Position {
-    func `in`(_ geometry: GeometryProxy) -> CGPoint {
-        let center = geometry.frame(in: .local).center
-        
+    func `in`(_ geometry: GeometryProxy?) -> CGPoint {
+        let center = geometry?.frame(in: .local).center ?? .zero
         return CGPoint(x: center.x + CGFloat(x), y: center.y - CGFloat(y))
     }
 }

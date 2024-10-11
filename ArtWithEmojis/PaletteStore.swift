@@ -54,16 +54,27 @@ class PaletteStore: ObservableObject, Identifiable, Equatable, Hashable {
     }
     
     //MARK: -adding Palettes
-    
     func insert(_ palette: Palette, at insertionIndex: Int? = nil) {
         let insertionIndex = boundsCheckedPaletteIndex(insertionIndex ?? cursorIndex)
-        if let index = palettes.firstIndex(where: { $0.id == palette.id}){
-           // palette.move(fromOffset: IndexSet([index]),  toOffset: insertionIndex)
-            palettes.replaceSubrange(insertionIndex...insertionIndex, with: [palette])
+        
+        if let index = palettes.firstIndex(where: { $0.id == palette.id }) {
+            // Move the palette from its current index to the new insertion index
+            let paletteToMove = palettes.remove(at: index)
+            palettes.insert(paletteToMove, at: insertionIndex)
         } else {
             palettes.insert(palette, at: insertionIndex)
         }
     }
+    
+//    func insert(_ palette: Palette, at insertionIndex: Int? = nil) {
+//        let insertionIndex = boundsCheckedPaletteIndex(insertionIndex ?? cursorIndex)
+//        if let index = palettes.firstIndex(where: { $0.id == palette.id}){
+//           // palette.move(fromOffset: IndexSet([index]),  toOffset: insertionIndex)
+//            palettes.replaceSubrange(insertionIndex...insertionIndex, with: [palette])
+//        } else {
+//            palettes.insert(palette, at: insertionIndex)
+//        }
+//    }
     
     func insert(name: String, emojis: String, at index: Int? = nil) {
         insert(Palette(name: name, emojis: emojis))

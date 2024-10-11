@@ -41,12 +41,18 @@ struct EmojiArtDocumentView: View {
                     .offset(pan + gesturePan)
                 }
             .gesture(panGesture.simultaneously(with: zoomGesture))
-            
+            .onTapGesture(count: 2) {
+                zoomToFit(document.bbox, in: geometry)
+            }
             .dropDestination(for: StrURLData.self ) { strURLData, location in
                 return drop(strURLData, at: location, in: geometry)
             }
             .onChange(of: document.background.failureReason) { reason in
                 showBackgroundFailureAlert = (reason != nil)
+            }
+            .onChange(of: document.background.uiImage) { uiImage in
+                zoomToFit(uiImage?.size, in: geometry)
+                
             }
             .alert(
                 "Set Background",
@@ -62,6 +68,26 @@ struct EmojiArtDocumentView: View {
         }
     }
     
+    private func zoomToFit(_ size: CGSize?, in geometry: GeometryProxy) {
+        if let size = size {
+            zoomToFit(CGRect(center: .zero, size: size), in: geometry)
+        }
+    }
+    
+    private func zoomToFit(_ rect: CGRect, in geometry: GeometryProxy) {
+        withAnimation {
+            if rect.size.width > 0, rect.size.height > 0,
+               geometry.size.width > 0, geometry.size.height > 0 {
+                let hZoom = geometry.size.width / rect.size.width
+                let vZoom = geometry.size.height / rect.size.height
+                zoom = min(hZoom, vZoom)
+                pan = CGOffset(
+                    width: -rect.midX * zoom,
+                    height: -rect.midY * zoom
+                    )
+            }
+        }
+    }
     
     @State private var showBackgroundFailureAlert = false
     

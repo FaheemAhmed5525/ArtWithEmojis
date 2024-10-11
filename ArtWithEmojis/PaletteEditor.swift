@@ -56,9 +56,10 @@ struct PaletteEditor: View {
                 ForEach(palette.emojis.uniqued.map(String.init), id: \.self) { emoji in
                     Text(emoji)
                         .onTapGesture {
-                            withAnimation {
-                                palette.emojis.remove(emoji.first!)
-                                emojisToAdd.remove(emoji.first!)
+                            withAnimation {                                     //MARK: -Check to void erors
+                                
+                                palette.emojis.removeAll { $0 == emoji.first! }
+                                emojisToAdd.removeAll { $0 == emoji.first! }
                             }
                         }
                 }
