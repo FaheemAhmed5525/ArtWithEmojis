@@ -14,6 +14,11 @@ class EmojiArtDocument: ObservableObject {
     @Published private var emojiArt = EmojiArt() {
         didSet {
             autoSave()
+            if emojiArt.background != oldValue.background {
+                Task {
+                    await fatchBackgroundImage()
+                }
+            }
         }
     }
     private let autoSaveURL: URL = URL.documentsDirectory.appendingPathComponent("Autosaved.emojiart")
@@ -48,9 +53,80 @@ class EmojiArtDocument: ObservableObject {
         emojiArt.emojis
     }
     
-    var background: URL? {
-        emojiArt.background
+//    var background: URL? {
+//        emojiArt.background
+//    }
+    
+    @Published  var background: Background = .none
+    
+    
+    //MARK: -Background
+    
+    @MainActor
+    private func fatchBackgroundImage() async {
+        if let url = emojiArt.background {
+            background = .fatching(url)
+            do {
+                let image = try await fetchUIImage(from: url)
+                if url == emojiArt.background {
+                    background = .found(try await fetchUIImage(from: url))
+                }
+            } catch {
+                background = .failed("Could't set background: \(error.localizedDescription)")
+            }
+            background = .failed("Error message")
+        } else {
+            background = .none
+        }
     }
+
+    private func fetchUIImage(from url: URL) async throws -> UIImage {
+        let (data, _) = try await URLSession.shared.data(from: url)
+        if let uiImage = UIImage(data: data) {
+            return UIImage(data: data)!
+        } else {
+            throw FetchError.badImageData
+        }
+    }
+    
+    
+    enum FetchError: Error {
+        case badImageData
+    }
+    
+    enum Background {
+        case none
+        case fatching(URL)
+        case found(UIImage)
+        case failed(String)
+        
+        var uiImage: UIImage? {
+            switch self {
+            case .found(let uiImage): return uiImage
+            default: return nil
+            }
+        }
+        
+        var urlBeingFatched: URL? {
+            switch self {
+            case .fatching(let url): return url
+            default: return nil
+            }
+        }
+        
+        var isFatching: Bool {
+            urlBeingFatched != nil
+        }
+        
+        var failureReason: String {
+            switch self {
+            case .failed(let reason): return reason
+            default: return ""
+            }
+        }
+    }
+    
+    
     
     
     // MARK: - Intent
