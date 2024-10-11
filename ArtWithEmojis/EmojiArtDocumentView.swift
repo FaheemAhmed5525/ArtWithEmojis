@@ -48,11 +48,11 @@ struct EmojiArtDocumentView: View {
                 return drop(strURLData, at: location, in: geometry)
             }
             .onChange(of: document.background.failureReason) { reason in
-                showBackgroundFailureAlert = (reason != nil)
+                // Check if the failureReason is not empty
+                showBackgroundFailureAlert = !reason.isEmpty
             }
             .onChange(of: document.background.uiImage) { uiImage in
                 zoomToFit(uiImage?.size, in: geometry)
-                
             }
             .alert(
                 "Set Background",
