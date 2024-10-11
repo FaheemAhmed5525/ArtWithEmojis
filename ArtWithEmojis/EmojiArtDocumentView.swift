@@ -27,6 +27,13 @@ struct EmojiArtDocumentView: View {
     private var documentBody: some View {
         GeometryReader { geometry in
             ZStack {
+                
+                if document.background.isFatching {
+                    ProgressView()
+                        .scaleEffect(2)
+                        .tint(.blue)
+                        .position(Emoji.Position.zero.in(geometry))
+                }
                 Color.gray
                 
                 documentContents(in: geometry)
@@ -38,10 +45,25 @@ struct EmojiArtDocumentView: View {
             .dropDestination(for: StrURLData.self ) { strURLData, location in
                 return drop(strURLData, at: location, in: geometry)
             }
-            
+            .onChange(of: document.background.failureReason) { reason in
+                showBackgroundFailureAlert = (reason != nil)
+            }
+            .alert(
+                "Set Background",
+                isPresented: $showBackgroundFailureAlert,
+                presenting: document.background.failureReason,
+                actions: { reason in
+                    Button("OK", role: .cancel) { }
+                },
+                message: { reason in
+                    Text(reason)
+                }
+            )
         }
     }
     
+    
+    @State private var showBackgroundFailureAlert = false
     
     @State private var zoom: CGFloat = 1
     @State private var pan: CGOffset = .zero//.init(width: 100, height: 100)
