@@ -11,6 +11,9 @@ struct EmojiArtDocumentView: View {
     
     @Environment(\.undoManager) var undoManager
     
+    @StateObject var paletteStore = PaletteStore(named: "Shared")
+
+    
     typealias Emoji = EmojiArt.Emoji
     
     @ObservedObject var document: EmojiArtDocument
@@ -30,6 +33,7 @@ struct EmojiArtDocumentView: View {
         .toolbar {
             UndoButton()
         }
+        .environmentObject(paletteStore) // Injecting the environment object here
     }
     
     private var documentBody: some View {
