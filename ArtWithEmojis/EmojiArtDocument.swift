@@ -6,14 +6,39 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
-
-class EmojiArtDocument: ObservableObject {
+class EmojiArtDocument: ReferenceFileDocument {
+    
+    @Environment(\.undoManager) var undoManager
+    
+    func snapshot(contentType: UTType) throws -> Data {
+        try emojiArt.json()
+    }
+    
+    func fileWrapper(snapshot: Data, configuration: WriteConfiguration) throws -> FileWrapper {
+        FileWrapper(regularFileWithContents: snapshot)
+    }
+    
+//    typealias Snapshot = Data
+    
+    static var readableContentTypes: [UTType] {
+        [.emojiart]
+    }
+    
+    required init(configuration: ReadConfiguration) throws {
+        if let data = configuration.file.regularFileContents {
+            emojiArt = try EmojiArt(json: data)
+        } else {
+            throw CocoaError(.fileReadCorruptFile)
+        }
+    }
+    
     typealias Emoji = EmojiArt.Emoji
     
     @Published private var emojiArt = EmojiArt() {
         didSet {
-            autoSave()
+//            autoSave()
             if emojiArt.background != oldValue.background {
                 Task {
                     await fatchBackgroundImage()
@@ -23,28 +48,28 @@ class EmojiArtDocument: ObservableObject {
     }
     private let autoSaveURL: URL = URL.documentsDirectory.appendingPathComponent("Autosaved.emojiart")
     
-    
-    private func autoSave() {
-        save(to: autoSaveURL)
-        print("Autoseved to \(autoSaveURL)")
-    }
-    
-    
-    private func save(to url: URL) {
-        do {
-            let data = try emojiArt.json()
-            try data.write(to: url)
-        } catch let error {
-            print("Error while saving document: \(error.localizedDescription)")
-        }
-    }
+//    
+//    private func autoSave() {
+//        save(to: autoSaveURL)
+//        print("Autoseved to \(autoSaveURL)")
+//    }
+//    
+//    
+//    private func save(to url: URL) {
+//        do {
+//            let data = try emojiArt.json()
+//            try data.write(to: url)
+//        } catch let error {
+//            print("Error while saving document: \(error.localizedDescription)")
+//        }
+//    }
     
     init() {
         
-        if let data = try? Data(contentsOf: autoSaveURL),
-           let autoSavedEmojiArt = try? EmojiArt(json: data) {
-            emojiArt = autoSavedEmojiArt
-        }
+//        if let data = try? Data(contentsOf: autoSaveURL),
+//           let autoSavedEmojiArt = try? EmojiArt(json: data) {
+//            emojiArt = autoSavedEmojiArt
+//        }
         emojiArt.addEmoji("☀️", at: .init(x: 400, y: 520), size: 200)
         emojiArt.addEmoji("🍀", at: .init(x: -300, y: -520), size: 230)
     }
@@ -142,13 +167,30 @@ class EmojiArtDocument: ObservableObject {
     
     // MARK: - Intent
     
-    func setBackground(_ url: URL?) {
-        emojiArt.background = url
+    private func undoableyPerform(_ action: String, with undoManager: UndoManager? = nil, doit: () -> Void) {
+        let oldEmojiArt = emojiArt
+        doit()
+        undoManager?.registerUndo(withTarget: self) { myself in
+            myself.undoableyPerform(action, with: undoManager) {
+                myself.emojiArt = oldEmojiArt
+            }
+        }
+        
+        
+        undoManager?.setActionName(action)
+    }
+    
+    func setBackground(_ url: URL?, undoWith undoManager: UndoManager? = nil) {
+        undoableyPerform("Set Background", with: undoManager) {
+            emojiArt.background = url
+        }
     }
     
     
-    func addEmoji(_ emoji: String, at position: Emoji.Position, size: CGFloat) {
-        emojiArt.addEmoji(emoji, at: position, size: size)
+    func addEmoji(_ emoji: String, at position: Emoji.Position, size: CGFloat, undoWith undoManager: UndoManager? = nil) {
+        undoableyPerform("Add \(emoji)", with: undoManager) {
+            emojiArt.addEmoji(emoji, at: position, size: size)
+        }
     }
 }
     
@@ -168,4 +210,8 @@ extension EmojiArt.Emoji.Position {
         let center = geometry?.frame(in: .local).center ?? .zero
         return CGPoint(x: center.x + CGFloat(x), y: center.y - CGFloat(y))
     }
+}
+
+extension UTType {
+    static let emojiart = UTType(exportedAs: "CrossStart.FaheemAhmed5525")
 }
